@@ -6,6 +6,6 @@ const router = express.Router();
 
 //http://localhost:3000/upload-pdf
 
-router.post('/upload-pdf', upload.single('pdf'), uploadPdf);
+router.post('/upload-pdf', upload.single('file'), uploadPdf);
 
 module.exports = router;
