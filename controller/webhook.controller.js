@@ -2,11 +2,12 @@ const { shopify } = require("../utils/shopify");
 
 const Webhook = async (req, res) => {
   try {
-    const { order } = req.body; 
+    const order = req.body;
     console.log("📦 Incoming order:", order.id);
 
     let email;
-    
+
+    // 🔍 Extract email from line item properties
     for (const item of order.line_items || []) {
       if (Array.isArray(item.properties)) {
         for (const prop of item.properties) {
@@ -23,7 +24,7 @@ const Webhook = async (req, res) => {
       if (email) break;
     }
 
-    // 🔁 Fallback to order.email if not found in line_items
+    // 🔁 Fallback to order.email
     if (!email && order.email) {
       email = order.email.trim();
     }
@@ -33,7 +34,7 @@ const Webhook = async (req, res) => {
       return res.status(400).json({ message: "Email not found in order or line items." });
     }
 
-    // 🔍 Check if customer already exists
+    // 🔍 Check if customer exists
     const existingCustomers = await shopify.customer.search({ query: `email:${email}` });
 
     if (existingCustomers.length > 0) {
@@ -41,7 +42,7 @@ const Webhook = async (req, res) => {
       return res.status(200).json({ message: "Customer already exists", email });
     }
 
-    // ✅ Create customer with email
+    // ✅ Create new customer with email only
     const createdCustomer = await shopify.customer.create({ email });
 
     console.log(`✅ Customer created: ${createdCustomer.id} (${email})`);
