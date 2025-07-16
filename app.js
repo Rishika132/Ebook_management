@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require('path');
+const cors = require("cors");
 const WebhookRouter = require("./routes/webhook.route");
 const UserRouter = require("./routes/user.route");
 const BookRouter = require("./routes/book.route");
@@ -13,6 +14,7 @@ dotenv.config();
 
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

@@ -6,8 +6,7 @@ const Webhook = async (req, res) => {
     console.log("📦 Incoming order:", order.id);
 
     let email;
-
-    // 🔍 Try to extract email from line_item properties
+    
     for (const item of order.line_items || []) {
       if (Array.isArray(item.properties)) {
         for (const prop of item.properties) {
