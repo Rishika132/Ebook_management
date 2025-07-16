@@ -4,7 +4,7 @@ const { shopify } = require("../utils/shopify");
 const Webhook = async (req, res) => {
   try {
     const order = req.body;
-
+    console.log(order);
     const email = order.email;
 
     const existingCustomers = await shopify.customer.search({ query: `email:${email}` });
