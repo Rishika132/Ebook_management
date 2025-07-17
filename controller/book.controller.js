@@ -3,7 +3,7 @@ const Book = require('../model/book.model');
 
 const uploadPdf = async (req, res) => {
   try {
-     const product_id = req.body;
+     const {product_id}=req.body;
     if (!req.file) return res.status(400).json({ message: 'No PDF uploaded' });
 
     const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
