@@ -2,8 +2,8 @@ const { shopify } = require("../utils/shopify");
 
 const Webhook = async (req, res) => {
   try {
-    const order = req.body; // ✅ FIXED HERE
-    console.log("📦 Incoming order:", order.id);
+    const order = req.body; 
+    // console.log("📦 Incoming order:", order.id);
 
     let email;
 
