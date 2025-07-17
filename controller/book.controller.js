@@ -11,7 +11,7 @@ const uploadPdf = async (req, res) => {
     const newBook = new Book({ url: fileUrl });
     await newBook.save();
 
-    res.status(200).json({ message: 'PDF uploaded & URL saved.',   id: newBook._id   });
+    res.status(200).json({ message: 'PDF uploaded & URL saved.',   id: newBook._id , fileUrl   });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Internal Server Error' });
