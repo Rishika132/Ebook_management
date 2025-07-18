@@ -2,7 +2,7 @@ const User = require("../model/user.model");
 
 const login = async (req, res) => {
   try {
-    const { email, system_id, first } = req.body;
+    const { email, system_id, logged_out, first } = req.body;
 
     if (!email || !system_id) {
       return res.status(400).json({ message: "Email and system_id are required" });
@@ -10,6 +10,16 @@ const login = async (req, res) => {
 
     if (first === true) {
       const existingUser = await User.findOne({ system_id });
+
+        if (logged_out && existingUser) {
+      await User.deleteOne({ system_id });
+      return res.status(200).json({
+        message: "User logged out and entry deleted",
+        email,
+        system_id,
+        deleted: true
+      });
+    }
 
       if (existingUser) {
         return res.status(409).json({message: "System ID already exists."});
