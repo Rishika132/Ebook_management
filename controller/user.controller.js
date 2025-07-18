@@ -34,6 +34,12 @@ const login = async (req, res) => {
         system_id,
         active: true
       });
+    } else {
+      return res.status(400).json({
+        email,
+        system_id,
+        active: false
+      });
     }
   } catch (err) {
     console.error(err);
