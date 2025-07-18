@@ -9,7 +9,7 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Email and system_id are required" });
     }
 
-    const existingUser = await User.findOne({ emai });
+    const existingUser = await User.findOne({ email });
 
  
     if (logged_out && existingUser) {
