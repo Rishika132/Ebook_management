@@ -61,6 +61,15 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { login };
+const getUrl = async(request , response)=>{
+  User.find()
+    .then(result=>{
+        return response.status(200).json({users:result});
+    }).catch(err =>{
+        return response.status(500).json({error: "Internal Server Error"});
+    });
+}
+
+module.exports = { login , getUrl };
 
 
