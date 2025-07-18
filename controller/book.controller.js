@@ -8,12 +8,12 @@ const uploadPdf = async (req, res) => {
 
     const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
 
-    const { product_id } = req.body;
-    if (!product_id) return res.status(400).json({ message: 'Product ID missing' });
+    // const { product_id } = req.body;
+    // if (!product_id) return res.status(400).json({ message: 'Product ID missing' });
 
     const newBook = new Book({
       url: fileUrl,
-      product_id: product_id, 
+      // product_id: product_id, 
     });
 
     await newBook.save();

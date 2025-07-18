@@ -4,11 +4,11 @@ const bookSchema = new mongoose.Schema({
     url: {
         type: String,
         required: true
-    },
-    product_id:{
-        type: String,
-        required: true
-    }
+    // },
+    // product_id:{
+    //     type: String,
+    //     required: true
+     }
 });
 
 const Book = mongoose.model("book", bookSchema);
