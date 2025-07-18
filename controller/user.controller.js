@@ -74,7 +74,6 @@ const login = async (req, res) => {
 
     const existingUser = await User.findOne({ system_id });
 
-    // ✅ 1. LOGOUT FLOW
     if (logged_out === true) {
       if (existingUser) {
         await User.deleteOne({ system_id });
@@ -94,13 +93,12 @@ const login = async (req, res) => {
       }
     }
 
-    // ✅ 2. LOGIN FLOW (first === true)
+
     if (first === true) {
       if (existingUser) {
         return res.status(409).json({ message: "System ID already exists." });
       }
 
-      // Deactivate all other users with same email
       await User.updateMany({ email }, { $set: { active: false } });
 
       const newUser = new User({
@@ -120,18 +118,14 @@ const login = async (req, res) => {
       });
     }
 
-    // ❌ 3. No 'first' or 'logged_out' → invalid flow
+  
     return res.status(400).json({
-      message: "Invalid request. Provide either 'first: true' for login or 'logged_out: true' for logout.",
+      message: "Invalid request.",
       email,
-      system_id
+      system_id,active
     });
 
   } catch (err) {
-    console.error(err);
-    if (err.code === 11000) {
-      return res.status(409).json({ message: "Duplicate system_id not allowed" });
-    }
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
