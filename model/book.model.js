@@ -13,6 +13,6 @@ const bookSchema = new mongoose.Schema({
         required: true
      }
     
-});
+}, { timestamps: true });
 const Book = mongoose.model("book", bookSchema);
 module.exports = Book;
