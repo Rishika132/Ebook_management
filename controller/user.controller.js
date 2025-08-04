@@ -8,6 +8,7 @@ const login = async (req, res) => {
       const existingUser = await User.findOne({ system_id });
           if (logged_out === true) {
       if (existingUser) {
+            if (existingUser.active === false) {
         await User.deleteOne({ system_id });
           if (global.io) {
           global.io.to(email).emit('user-logout', {
@@ -30,7 +31,7 @@ const login = async (req, res) => {
         });
       }
     }
-    
+    }
       if (existingUser) {
         return res.status(409).json({message: "System ID already exists.", active: existingUser.active});
       }
@@ -39,14 +40,13 @@ const login = async (req, res) => {
         { $set: { active: false } }
       );
        if (existingUser.active === false) {
-        await User.deleteMany({ email, active: false });
+        if (global.io) {
+      global.io.to(email).emit('user-logout', {
+        message: 'You have been logged out from another device',
+        timestamp: new Date()
+      });
+    }
        }
-    //     if (global.io) {
-    //   global.io.to(email).emit('user-logout', {
-    //     message: 'You have been logged out from another device',
-    //     timestamp: new Date()
-    //   });
-    // }
 
       const newUser = new User({
         email,
