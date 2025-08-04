@@ -23,9 +23,9 @@ mongoose.connect(process.env.MONGODB_URI)
         // Attach socket.io to HTTP server
         const io = socketIo(server, {
             cors: {
-                origin: '*', // ya specific domain
-                methods: ['GET', 'POST']
-            }
+                origin: '*',
+                methods: ['GET', 'POST'],
+            },
         });
 
         // Store io globally
@@ -41,7 +41,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
         app.use("/", UserRouter);
         app.use("/webhook", WebhookRouter);
-        app.use("/",BookRouter);
+        app.use("/", BookRouter);
         server.listen(4000, () => {
             console.log("Server started on port 3000");
         });
