@@ -31,7 +31,7 @@ const login = async (req, res) => {
         { email },
         { $set: { active: false } }
       );
-console.log(User.find());
+console.log(User.find({email}).lean());
 //                   global.io.emit('user-logout', {
 //   message: 'User logged out successfully',
 //   timestamp: new Date(),
