@@ -54,7 +54,7 @@ const login = async (req, res) => {
         timestamp: new Date()
       });
     }
-    await User.deleteMany({ email, active: false });
+
 
     const newUser = new User({
       email,
@@ -63,7 +63,7 @@ const login = async (req, res) => {
       last_checked: new Date()
     });
     await newUser.save();
-
+      await User.deleteMany({ email, active: false });
     return res.status(200).json({
       message: "New system registered successfully",
       email,
