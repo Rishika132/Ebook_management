@@ -46,6 +46,7 @@ const login = async (req, res) => {
     }
 
     await User.updateMany({ email }, { $set: { active: false } });
+   await User.deleteMany({ email, active: false });
 
     if (global.io) {
       global.io.to(email).emit('user-logout', {
