@@ -6,6 +6,8 @@ const WebhookRouter = require("./routes/webhook.route");
 const UserRouter = require("./routes/user.route");
 const BookRouter = require("./routes/book.route");
 const dotenv = require("dotenv");
+const socketIo = require('socket.io');
+const http = require('http');
 dotenv.config();
 
 const app = express();
@@ -16,10 +18,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
         console.log("Connected to MongoDB");
+        const server = http.createServer(app);
+
+        // Attach socket.io to HTTP server
+        const io = socketIo(server, {
+            cors: {
+                origin: '*', // ya specific domain
+                methods: ['GET', 'POST']
+            }
+        });
+
+        // Store io globally
+        global.io = io;
+
+        io.on('connection', (socket) => {
+            console.log('✅ Client connected via WebSocket');
+
+            socket.on('disconnect', () => {
+                console.log('❌ Client disconnected');
+            });
+        });
+
         app.use("/", UserRouter);
         app.use("/webhook", WebhookRouter);
         app.use("/",BookRouter);
-        app.listen(4000, () => {
+        server.listen(4000, () => {
             console.log("Server started on port 3000");
         });
     })
