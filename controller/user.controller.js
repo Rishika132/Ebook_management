@@ -55,7 +55,7 @@ const login = async (req, res) => {
       last_checked: new Date()
     });
     await newUser.save();
-
+    
         if (global.io) {
       global.io.to(email).emit('user-logout', {
         message: 'You have been logged out from another device',
@@ -63,14 +63,8 @@ const login = async (req, res) => {
       });
     }
 
-setTimeout(async () => {
-  try {
-    const result = await User.deleteMany({ email, active: false });
-  } catch (err) {
-    console.error("Error deleting users:", err);
-  }
-}, 60000);
-
+    await User.deleteMany({ email, active: false });
+    
     return res.status(200).json({
       message: "New system registered successfully",
       email,
