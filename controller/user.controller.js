@@ -11,10 +11,9 @@ const login = async (req, res) => {
 
     const existingUser = await User.findOne({ system_id });
 
-    // ✅ LOGOUT FLOW
     if (logged_out === true) {
       if (existingUser) {
-        if (existingUser.active === false) {
+        if (existingUser && !existingUser.active){
           await User.deleteOne({ system_id });
           if (global.io) {
             global.io.to(email).emit('user-logout', {
@@ -39,7 +38,6 @@ const login = async (req, res) => {
       }
     }
 
-    // ✅ If system_id already exists, block new login
     if (existingUser) {
       return res.status(409).json({
         message: "System ID already exists.",
@@ -47,10 +45,8 @@ const login = async (req, res) => {
       });
     }
 
-    // ✅ Mark all old devices as inactive
     await User.updateMany({ email }, { $set: { active: false } });
 
-    // ✅ Emit logout event to all old devices
     if (global.io) {
       global.io.to(email).emit('user-logout', {
         message: 'You have been logged out from another device',
@@ -58,7 +54,7 @@ const login = async (req, res) => {
       });
     }
 
-    // ✅ Now safe to save the new user
+
     const newUser = new User({
       email,
       system_id,
@@ -75,7 +71,7 @@ const login = async (req, res) => {
     });
 
   } catch (err) {
-    console.error("❌ Login Error:", err);
+    console.error(" Login Error:", err);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
