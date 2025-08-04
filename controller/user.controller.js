@@ -48,14 +48,6 @@ const login = async (req, res) => {
     await User.updateMany({ email }, { $set: { active: false } });
 
 
-    if (global.io) {
-      global.io.to(email).emit('user-logout', {
-        message: 'You have been logged out from another device',
-        timestamp: new Date()
-      });
-    }
-
-
     const newUser = new User({
       email,
       system_id,
@@ -63,7 +55,15 @@ const login = async (req, res) => {
       last_checked: new Date()
     });
     await newUser.save();
-      await User.deleteMany({ email, active: false });
+    
+        if (global.io) {
+      global.io.to(email).emit('user-logout', {
+        message: 'You have been logged out from another device',
+        timestamp: new Date()
+      });
+    }
+
+    await User.deleteMany({ email, active: false });
     return res.status(200).json({
       message: "New system registered successfully",
       email,
