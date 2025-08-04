@@ -39,12 +39,12 @@ const login = async (req, res) => {
         { email },
         { $set: { active: false } }
       );
-        if (global.io) {
-      global.io.to(email).emit('user-logout', {
-        message: 'You have been logged out from another device',
-        timestamp: new Date()
-      });
-    }
+    //     if (global.io) {
+    //   global.io.to(email).emit('user-logout', {
+    //     message: 'You have been logged out from another device',
+    //     timestamp: new Date()
+    //   });
+    // }
 
       const newUser = new User({
         email,
