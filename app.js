@@ -33,7 +33,12 @@ mongoose.connect(process.env.MONGODB_URI)
 
         io.on('connection', (socket) => {
             console.log('✅ Client connected via WebSocket');
-
+  
+             socket.on("join-room", (email) => {
+    socket.join(email);
+    console.log(`Socket ${socket.id} joined room: ${email}`);
+  });
+  
             socket.on('disconnect', () => {
                 console.log('❌ Client disconnected');
             });

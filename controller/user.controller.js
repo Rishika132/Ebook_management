@@ -9,6 +9,12 @@ const login = async (req, res) => {
           if (logged_out === true) {
       if (existingUser) {
         await User.deleteOne({ system_id });
+          if (global.io) {
+          global.io.to(email).emit('user-logout', {
+            message: 'User logged out successfully',
+            timestamp: new Date(),
+          });
+        }
         return res.status(200).json({
           message: "User logged out and entry deleted",
           email,
@@ -31,11 +37,13 @@ const login = async (req, res) => {
         { email },
         { $set: { active: false } }
       );
-console.log(User.find({email}).lean());
-//                   global.io.emit('user-logout', {
-//   message: 'User logged out successfully',
-//   timestamp: new Date(),
-// });
+        if (global.io) {
+      global.io.to(email).emit('user-logout', {
+        message: 'You have been logged out from another device',
+        timestamp: new Date()
+      });
+    }
+
       const newUser = new User({
         email,
         system_id,
