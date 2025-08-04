@@ -3,7 +3,6 @@ const User = require("../model/user.model");
 const login = async (req, res) => {
   try {
     const { email, system_id, logged_out } = req.body;
-    console.log(req.body);
 
     if (!email || !system_id) {
       return res.status(400).json({ message: "Email and system_id are required" });
@@ -64,7 +63,7 @@ const login = async (req, res) => {
     }
 
     await User.deleteMany({ email, active: false });
-    
+
     return res.status(200).json({
       message: "New system registered successfully",
       email,
